@@ -1,0 +1,134 @@
+Actions:
+How to mouse over with selenium
+how to right click' IQs (Intweview Questions)
+context click of element
+double click of element
+drag and drop of element
+
+to move
+public class Learning_Actions {
+
+	public static void main(String[] args) {
+	
+		
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\HP\\Documents\\chromedriver.exe");
+		WebDriver driver=new ChromeDriver();
+		// to maximize the window
+			driver.manage().window().maximize();
+		driver.get("https://www.amazon.com/");
+		
+		//Create object to actions class
+		Actions a=new Actions(driver);
+		//build to build the path and is just ready to execute use perform to execute we use composite operations
+		//moving mouse
+		
+//declare move variable with WebElement type just to our understanding
+		WebElement move=driver.findElement(By.xpath("//span[@id='nav-link-accountList-nav-line-1']"));
+		//a.moveToElement(driver.findElement(By.xpath("//span[@id='nav-link-accountList-nav-line-1']"))).build().perform();
+		a.moveToElement(move).build().perform();
+		
+
+//To write caps
+
+a.moveToElement(driver.findElement(By.id("twotabsearchtextbox"))).click().keyDown(Keys.SHIFT).sendKeys("hello").build().perform();
+//To write in CAPS and to select use doubleclick() method
+a.moveToElement(driver.findElement(By.id("twotabsearchtextbox"))).click().keyDown(Keys.SHIFT).sendKeys("hello").doubleClick().build().perform();
+//To right click 				
+a.moveToElement(move).contextClick().build().perform();					
+
+To open child tabs
+if we go to one tab and click something if it moves to another tab we need to dp some operations and again go to parent tab
+selenium treats New tab and new window as same
+
+	System.setProperty("webdriver.chrome.driver", "C:\\Users\\HP\\Documents\\chromedriver.exe");
+		WebDriver driver= new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://rahulshettyacademy.com/loginpagePractise/#");
+		driver.findElement(By.cssSelector("a.blinkingText")).click();
+		// to get opened tabs and store in iterator
+		Set<String> windows=driver.getWindowHandles();// [parent id, child id]
+		Iterator<String> it= windows.iterator();
+		String parentId=it.next();
+		String childId=it.next();
+		
+		
+		//To switch from parent to child
+		driver.switchTo().window(childId);
+		System.out.println(driver.findElement(By.cssSelector("p.im-para.red")).getText()); 
+		
+==================================================================
+public class Switch_Tabs_ChildTabs {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\HP\\Documents\\chromedriver.exe");
+		WebDriver driver= new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://rahulshettyacademy.com/loginpagePractise/#");
+		driver.findElement(By.cssSelector("a.blinkingText")).click();
+		// to get opened tabs and store in iterator
+		Set<String> windows=driver.getWindowHandles();// [parent id, child id]
+		Iterator<String> it= windows.iterator();
+		String parentId=it.next();
+		String childId=it.next();
+		
+		
+		//To switch from parent to child
+		driver.switchTo().window(childId);
+		System.out.println(driver.findElement(By.cssSelector("p.im-para.red")).getText()); 
+		driver.findElement(By.cssSelector("p.im-para.red")).getText();
+	String emailId=	driver.findElement(By.cssSelector("p.im-para.red")).getText().split("at")[1].trim().split(" ")[0];
+	System.out.println(emailId);
+	driver.switchTo().window(parentId);
+	driver.findElement(By.id("username")).sendKeys(emailId);
+		
+		
+		}
+
+}
+
+FRAMES:
+Frames are components hosted on the web pages, 
+frames are like specific containers which are independent
+of this HTML code, frame is separate htl code and we post in webpage as a container as a box.
+Selenium can't find in normal fashion, so we need to check in frame.
+
+In the context of a web browser, a frame is a part of a web page or browser window which displays 
+content independent of its container, with the ability to load content independently.
+ The HTML or media elements shown in a frame may come from a different web site 
+ as the other elements of content on display
+ public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\HP\\Documents\\chromedriver.exe");
+		WebDriver driver= new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("http://jqueryui.com/droppable/");
+		//Switching driver to frames 
+// Switch to frames can be done using 
+		driver.switchTo().frame(driver.findElement(By.cssSelector("iframe.demo-frame")));
+		driver.findElement(By.id("draggable")).click();
+======================================
+
+public class Frames {
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\HP\\Documents\\chromedriver.exe");
+		WebDriver driver= new ChromeDriver();
+		driver.get("http://jqueryui.com/droppable/");
+		//Finding Size
+		System.out.println(driver.findElements(By.tagName("iframe")).size());
+		//Switching driver to frames
+		//using Indexes
+		driver.switchTo().frame(0);
+		//using Web element
+		//driver.switchTo().frame(driver.findElement(By.cssSelector("iframe[class='demo-frame']")));
+        //driver.findElement(By.id("draggable")).click();
+//drag and drop 
+		Actions a=new Actions(driver);
+		
+		
+//User dragAndDrop method from Source to Destination
+		WebElement source=driver.findElement(By.id("draggable"));
+		WebElement target=driver.findElement(By.id("droppable"));
+		a.dragAndDrop(source, target).build().perform();
+		driver.switchTo().defaultContent();
+		driver.findElement(By.linkText("Accept")).click();
+		
